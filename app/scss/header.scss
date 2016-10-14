@@ -1,0 +1,31 @@
+@import 'variables.scss';
+
+header{
+	height: 60px;
+	width: 100%;
+	color: $header-text;
+	background-image: $header-gradient;
+	line-height: 60px; 
+	font-weight: 600;
+	box-shadow: $header-shadow; 
+	ul{
+		display: flex;
+		justify-content: space-around;
+		flex-wrap: wrap;
+		li{
+			flex: 0 1 230px;
+			text-align: center;
+			transition: all 200ms;
+			cursor: pointer;
+			&:hover{
+				color: $header-text-hover;
+			}
+			@media screen and (max-width: 700px){
+				flex: 1 1 100%;
+				border-bottom: 1px solid $header-text; 
+				background-image: $header-gradient; 
+				box-shadow: $header-shadow;
+			}
+		}
+	}
+}

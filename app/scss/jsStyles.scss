@@ -1,0 +1,30 @@
+@import 'variables.scss';
+
+@keyframes star{
+    from{
+        transform: rotate(0deg);
+        font-size: 0px;
+    }
+
+    to{
+        transform: rotate(360deg);
+        font-size: 22px; 
+    }
+}
+
+
+.star-shine-js{
+	color: $star-color !important;
+	animation: star 500ms;
+	animation-fill-mode: forwards;
+}
+
+.hide-search-js{
+    display: none !important;
+}
+
+.padding-if-search-hidden-js{
+    @media screen and (max-width: 700px){
+        padding-top: 120px;  
+    }
+}

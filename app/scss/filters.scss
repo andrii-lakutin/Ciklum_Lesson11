@@ -1,0 +1,64 @@
+@import 'variables.scss';
+
+.filtersSection{
+	width: 100%;
+	height: 120px;
+	display: flex; 
+	flex-wrap: wrap;
+	justify-content: space-around;
+	.type{
+		max-width: 100px; 
+		height: 30px;
+	}
+	select{
+		color: $search-placeholder;
+		padding: 5px; 
+		border: 0;
+		box-shadow: $btn-shadow;
+		cursor: pointer;
+		outline: none;
+		background: $select;
+		color: $select-text;
+		border-radius: 3px; 
+		font-weight: 600; 
+		option{
+			color: $select-text;
+			font-weight: 600; 
+			background: $select; 
+		}
+	}
+	input[type="text"]{
+		@include inputs(); 
+		padding: 6px;
+		width: 50px;  
+		box-shadow: $btn-shadow;  
+		font-weight: 600; 
+		color: $select-text;
+		background: $select;
+		border-radius: 3px; 
+		&::placeholder{
+			color: $select-text;
+		}
+	}  
+	.pages{
+		flex: 1 1 100%;
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		align-items: flex-start;
+		.page{
+			width: 30px;
+			height: 30px;
+			background: orange;
+			line-height: 30px;
+			text-align: center;
+			margin: 5px; 
+			border-radius: 2px; 
+			background: $btn-gradient;
+			color: white;
+			cursor: pointer; 
+			font-weight: 600;
+			box-shadow: $btn-shadow; 
+		}
+	}
+}

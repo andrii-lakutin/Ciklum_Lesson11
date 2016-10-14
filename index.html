@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Angular First App</title>
+	<!-- CSS -->
+	<link rel="stylesheet" href="build/styles.css">
+	<!-- FONTS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+	<link href='https://fonts.googleapis.com/css?family=Roboto:400,600,300&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+	<!-- ViewPort -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body ng-controller="appCtrl as app" ng-init="app.renderFavorite()">
+
+	<header>
+		<ul>
+			<li ng-repeat="item in app.items track by $index" ng-click="app.clickTarget(item)">
+				{{item}}
+				<i ng-class="app.icons[$index]" aria-hidden="true"></i>
+			</li>
+		</ul>
+	</header>
+
+	<section class="searchSection">
+		<div class="search">
+			<input type="text" placeholder="Wanna find something?" ng-model="app.searchInput">
+			<div id="search" class="button" ng-click="app.search()">Search</div>
+		</div>
+	</section>
+
+	<section class="filtersSection">
+		<div>
+			<select class="type" ng-model="app.selected" 
+					ng-options="item.text for item in app.selectOptions track by item.value"
+					ng-change="app.refreshData()">
+			</select>
+		</div>
+		<div class="year"><input type="text" placeholder="Year" id="year" ng-model="app.yearInput" ng-change="app.refreshData()"></div>
+		<div class="pages">
+			<div class="page" ng-repeat="item in app.pages track by $index" ng-click="app.setPage(item)">{{item}}</div>
+		</div>
+	</section>
+
+	<ng-view></ng-view>
+
+	<section class="moviesSection">
+		<div class="nonFavorites">
+			<div class="movie" ng-repeat="item in app.searchResult">
+				<a ng-href="#/movie/{{item.Title}}">
+					<div class="poster" ng-style="{'background': 'url(' + item.Poster + ') 50% 50% no-repeat', 'background-size' : 	'cover'}">
+						<div class= "shadow">{{item.Title}}</div>
+					</div>
+				</a>
+				<div class="social">
+						<p>{{item.Year}}</p>
+						<p>{{item.Type}}</p>
+						<p class="star"><i class="fa fa-star js-star" aria-hidden="true" ng-click="app.addToFavorite($event)"></i></p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<script src="build/main.bundle.js" type="text/javascript"></script>
+</body>
+</html>

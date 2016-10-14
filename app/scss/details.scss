@@ -1,0 +1,93 @@
+@import 'variables.scss';
+
+.details{
+	width: 100%;
+	text-align: center;
+	background: $details-bg;
+	color: $details-text;
+	display: flex;
+	.wrap{ 
+		min-width: 90%; 
+		margin: 0 auto;
+		display: flex;
+		flex-wrap: wrap;
+	}
+	.poster{
+		flex: 1 1 200px; 
+		height: 300px;
+		max-width: 200px; 
+		align-self: center; 
+		margin: 20px auto; 
+	} 
+	.description{
+		flex: 2 1 300px;
+		margin: 0 auto;
+		max-width: 400px;
+		align-self: center;
+		.title{
+			font-size: 30px; 
+			flex: 1 1 100%;
+			padding: 20px; 
+		} 
+		.plot{
+			padding: 5px; 
+			flex: 1 1 100%;
+		}
+		.extra{
+			flex: 1 1 100%;
+			margin: 20px; 
+			display: flex;
+			justify-content: space-around;
+		}
+	}
+	.comments{
+		flex: 1 1 auto;
+		margin: 0 auto;
+		max-width: 40%; 
+		display: flex;
+		flex-wrap: wrap;
+		overflow: hidden;
+		align-self: center;
+		@media screen and (max-width: 850px){
+			max-width: 100%;
+		}
+		.commentsPlace{
+			width: 90%;  
+			min-height: 280px; 
+			max-height: 400px;
+			flex: 1 1 80%;
+			background: $details-commentplace;
+			margin: 10px 10px; 
+			margin-top: 20px;
+			padding: 5px; 
+			overflow: auto;
+			text-align: left;
+			word-wrap: break-word;
+			color: $details-comment; 
+			font-weight: 600;
+			li{
+				margin-top: 10px; 
+				&:first-child{
+					margin-top: 0px; 
+				}
+			}  
+		}
+		input[type="text"]{
+			@include inputs();
+			flex: 1 1 60%;
+			padding: 5px; 
+			max-height: 30px; 
+			margin-bottom: 10px; 
+			margin-left: 10px; 
+		}
+		.btn{
+			flex: 1 1 15%;
+			padding: 5px; 
+			max-height: 30px; 
+			background: $details-btn;
+			margin-bottom: 10px; 
+			cursor: pointer; 
+			margin-right: 10px; 
+		}
+	}
+}

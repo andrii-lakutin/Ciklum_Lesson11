@@ -1,0 +1,65 @@
+// COLORS
+
+// GLOBAL
+$body: #F7F8FC;
+// HEADER
+$header-gradient: linear-gradient(to bottom left, #5B206E 20%, #507FCD 100%);
+$header-text: #FFFFFF;
+$header-text-hover: #212121;
+$header-shadow: 0px 5px 5px 0px rgba(0,0,0,0.20);
+// SEARCH
+$search-btn: linear-gradient(to bottom left, #46FCB1 1%, #23E1C6 100%);
+$search-btn-text: #FFFFFF;
+$input-text: #8ABF51;
+$search-placeholder: #757575;
+$search-shadow: 2px 5px 5px 1px rgba(0,0,0,0.20);
+
+//FILTERS
+$btn-gradient: #5B206E;
+$btn-shadow: 1px 1px 1px 1px rgba(0,0,0,0.40);
+$select: #5B206E;
+$select-text: #FFFFFF;
+
+// MOVIES
+$shadow: rgba(black, 0.6);
+$title-color: white;
+$title-size: 30px;
+$description-bg: white;
+$movie-shadow: 2px 4px 10px 1px #212121;
+$social-color: #757575;
+$star-shadow: 1px 4px 1px 1px rgba(0,0,0,0.30);
+$star-block: #5B206E;
+$star-unactive: black;
+$star-color: #FFFF00;
+
+//DETAILS
+$details-bg: #212121; 
+$details-text: white;
+$details-commentplace: rgba(white, 0.9);
+$details-btn: #5B206E;
+$details-comment: #5B206E;
+
+
+
+
+// FONTS
+$main-font: 'Roboto',sans-serif;
+$global-font-size: 16px;
+
+
+//MIX
+
+@mixin inputs() {
+	border: 0;
+	&:focus{
+		outline: none;
+	}
+	&::placeholder{ 
+		color: $search-placeholder;
+		text-indent: 5px;
+		transition: text-indent 500ms cubic-bezier(.87,-.41,.19,1.441);
+	}
+	&:focus::placeholder{
+		text-indent: -300px;
+	}
+}

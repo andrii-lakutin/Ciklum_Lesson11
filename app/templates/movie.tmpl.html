@@ -1,0 +1,23 @@
+<div class="details">
+	<div class="wrap">
+		<div class="poster" ng-style="{'background': 'url(' + poster + ') 50% 50% no-repeat', 'background-size' : 'cover'}"></div>
+		<div class="description">
+			<div class="title">{{title}}</div>
+			<div class="plot">{{plot}}</div>
+			<div class="extra">
+				<div class="runtime">{{runtime}}</div>
+				<div class="score">IMDB: {{score}}</div>
+				<div class="year">{{year}}</div>
+			</div>
+		</div>
+		<div class="comments">
+			<div class="commentsPlace">
+				<ul>
+					<li ng-repeat="comment in comments track by $index">{{comment}}</li>
+				</ul>
+			</div>
+			<input type="text" placeholder="Leave comment" ng-model="input">
+			<div class="btn" ng-click="send()">Send</div>
+		</div>
+	</div>
+</div>

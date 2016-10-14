@@ -1,0 +1,30 @@
+@import 'variables.scss';
+
+.searchSection{
+	min-width: 100%;
+	height: 150px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	@media screen and (max-width: 700px){
+		padding-top: 120px;  
+	}
+	.search{
+		min-width: 90%;
+		display: flex;
+		box-shadow: $search-shadow;
+		input{
+			padding: 9px;
+			flex: 6 1 auto; 
+			@include inputs();
+		}
+		.button{
+			text-align: center;
+			line-height: 33px; 
+			flex: 1 1 100px;
+			background: $search-btn;
+			color: $search-btn-text; 
+			cursor: pointer; 
+		}
+	}   
+}
