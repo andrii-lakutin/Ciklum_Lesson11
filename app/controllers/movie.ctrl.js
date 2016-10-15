@@ -28,6 +28,7 @@ export default class movieCtrl {
 			method: 'GET',
 			url: `http://www.omdbapi.com/?t=${newValue}&plot=full&r=json`
 			}).then(function successCallback(response) {
+				console.log(response);
 				$scope.parseResponse(response);
 			}, function errorCallback(response) {
 				console.log(response);

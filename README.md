@@ -2,4 +2,4 @@
 
 Demo - http://lakutin.pp.ua/imdbAngular/
 
-Clone -> npm i -> npm run dev
+Clone -> npm i -> npm run server / npm run dev
