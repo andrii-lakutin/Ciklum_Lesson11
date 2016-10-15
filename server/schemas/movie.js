@@ -1,14 +1,14 @@
 import mongoose from 'mongoose';
 
 var movieSchema = mongoose.Schema({
-	poster: String,
-	title: String,
-	plot: String,
-	runtime: String,
-	score: String,
-	year: String,
-	favoriteForThisUsers: [String],
-	comments: [String]
+	Poster: String,
+	Title: String,
+	Plot: String,
+	Runtime: String,
+	Score: String,
+	Year: String,
+	FavoriteForThisUsers: [String],
+	Comments: [String]
 });
 
 var Movie = mongoose.model('Movie', movieSchema);

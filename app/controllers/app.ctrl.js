@@ -56,19 +56,9 @@ export default class appCtrl {
 	getData(data){
 		self = this;
 
-		// this.http({
-		// 	method: 'GET',
-		// 	url: `http://localhost:3000/?s=${data.searchInput}&y=${data.yearInput}&type=${data.selectedValue}&page=${data.page}`
-		// }).then(function successCallback(response) {
-		// 	console.log(response);
-		// 	self.parseResponse(response);
-		// }, function errorCallback(response) {
-		// 	console.log(response);
-		// });
-
 		this.http({
 			method: 'GET',
-			url: `http://www.omdbapi.com/?s=${data.searchInput}&y=${data.yearInput}&type=${data.selectedValue}&plot=full&r=json&page=${data.page}`
+			url: `http://localhost:3000/s=${data.searchInput}&y=${data.yearInput}&type=${data.selectedValue}&plot=full&r=json&page=${data.page}`
 		}).then(function successCallback(response) {
 			console.log(response);
 			self.parseResponse(response);
@@ -78,7 +68,7 @@ export default class appCtrl {
 	}
 
 	parseResponse(response){	
-		var filtered = response.data.Search.filter((item, i, arr) =>{
+		var filtered = response.data.filter((item, i, arr) =>{
 			if (localStorage.getItem(`${item.Title}`) === null) {
 				return true;
 			} else {
