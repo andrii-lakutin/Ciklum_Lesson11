@@ -104,6 +104,15 @@ export default class appCtrl {
 		} else{
 			localStorage.setItem(`${title}`, movie.innerHTML);
 		}
+
+		// this.http({
+		// 	method: 'POST',
+		// 	url: `http://localhost:3000/setFavorite=${title}`
+		// }).then(function successCallback(response) {
+		// 	console.log(response);
+		// }, function errorCallback(response) {
+		// 	console.log(response);
+		// });
 	}
 
 	renderFavorite(){

@@ -17,16 +17,24 @@ export default class movieCtrl {
 		$scope.send = function(){
 			if ($scope.input) {
 				$scope.comments.push('Anonymus user : ' + $scope.input);
-				$scope.input = "";
-				localStorage.setItem(`${$scope.title} comments`, $scope.comments);
-			}
 
+				$http({
+					method: 'POST',
+					url: `http://localhost:3000/comment=${'Anonymus user : ' + $scope.input}&title=${$scope.title}`
+				}).then(function successCallback(response) {
+					console.log(response);
+				}, function errorCallback(response) {
+					console.log(response);
+				});
+
+				$scope.input = "";
+			}
 		}	
 
 		$scope.http = function(newValue){
 			$http({
 			method: 'GET',
-			url: `http://www.omdbapi.com/?t=${newValue}&plot=full&r=json`
+			url: `http://localhost:3000/t=${newValue}`
 			}).then(function successCallback(response) {
 				console.log(response);
 				$scope.parseResponse(response);
@@ -43,12 +51,8 @@ export default class movieCtrl {
 			$scope.runtime = data.Runtime;
 			$scope.poster = data.Poster;
 			$scope.plot = data.Plot;
-			$scope.score = data.imdbRating;
-
-			if (localStorage.getItem(`${$scope.title} comments`) != null) {
-				$scope.comments = localStorage.getItem(`${$scope.title} comments`).split(',');
-			}
-
+			$scope.score = data.Score;
+			$scope.comments = data.Comments;
 		}
 
     	$scope.$watch(function($scope){

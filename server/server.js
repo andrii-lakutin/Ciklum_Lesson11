@@ -5,21 +5,6 @@ import http from 'http';
 
 var app = express();
 
-// Movie.update({title: 'Test'}, {$set: {year: '1999999998'}}, function(err, result){
-// 	if (err) {
-// 		console.log(err);
-// 	} else {
-// 		console.log('Success!');
-// 	}
-// });
-// Movie.update({title: 'Test'}, {$push: {comments: '3333'}}, {multi : true} , function(err, result){
-// 	if (err) {
-// 		console.log(err);
-// 	} else {
-// 		console.log('Success!');
-// 	}
-// }, true);
-
 //CORS
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -27,14 +12,45 @@ app.use(function(req, res, next) {
   next();
 });
 
-// app.get('/', function (req, res) {
-//   console.log('someoneconnect');
-//   res.send('Hello World!');
+//1 ITEM
+app.get('/t=:title', function (req, res) {
+    Movie.find({Title: req.params.title}).exec(function(err, data){
+    	if (err) {
+    		console.log(err);
+    	} else {
+    		res.send(data[0]);
+    	}
+    });
+});
+
+//COMMENTS
+app.post('/comment=:comment&title=:title', function (req, res) {
+	Movie.update({Title: req.params.title}, {$push: {Comments: req.params.comment}}, function(err, result){
+		if (err) {
+			console.log(err);
+		} else {
+			console.log(`New comment on film ${req.params.title} : ${req.params.comment}`);
+		}
+	});
+	res.send('Comment added!');
+});
+
+// //FAVORITE
+// app.post('/setFavorite=:title', function (req, res) {
+// 	Movie.update({Title: req.params.title}, {$set: {Comments: req.params.comment}}, function(err, result){
+// 		if (err) {
+// 			console.log(err);
+// 		} else {
+// 			console.log();
+// 		}
+// 	});
+// 	res.send('Favorite added!');
 // });
 
-app.get('/s=:searchInput&y=:year?&type=:type?&page=:page?', function (req, res) {
 
-	console.log('someonewannasomedata');
+
+//10 ITEMS
+app.get('/s=:searchInput&y=:year?&type=:type?&page=:page?', function (req, res) {
 
 	var answer = [];
 
@@ -72,7 +88,7 @@ app.get('/s=:searchInput&y=:year?&type=:type?&page=:page?', function (req, res) 
 	function analyse (body){
 		var data = JSON.parse(body.toString());
 		data.Search.forEach((item,index)=>{
-			Movie.find({title: item.Title}).exec(function(err, data){
+			Movie.find({Title: item.Title}).exec(function(err, data){
 				if (err) {
 					console.log(err);
 				} else{
@@ -91,7 +107,6 @@ app.get('/s=:searchInput&y=:year?&type=:type?&page=:page?', function (req, res) 
 					}
 				}
 			});	
-
 		});
 	}
 
