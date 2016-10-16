@@ -1,6 +1,6 @@
 export default class movieCtrl {
 	/* @ngInject */
-	constructor($routeParams, $scope, $http) {
+	constructor($routeParams, $scope, $http, $rootScope) {
 
 		$scope.name = $routeParams.name;
 
@@ -16,11 +16,11 @@ export default class movieCtrl {
 
 		$scope.send = function(){
 			if ($scope.input) {
-				$scope.comments.push('Anonymus user : ' + $scope.input);
+				$scope.comments.push(`${$rootScope.user} : ` + $scope.input);
 
 				$http({
 					method: 'POST',
-					url: `http://localhost:3000/comment=${'Anonymus user : ' + $scope.input}&title=${$scope.title}`
+					url: `http://localhost:3000/comment=${$rootScope.user + ' : ' + $scope.input}&title=${$scope.title}`
 				}).then(function successCallback(response) {
 					console.log(response);
 				}, function errorCallback(response) {
@@ -36,7 +36,6 @@ export default class movieCtrl {
 			method: 'GET',
 			url: `http://localhost:3000/t=${newValue}`
 			}).then(function successCallback(response) {
-				console.log(response);
 				$scope.parseResponse(response);
 			}, function errorCallback(response) {
 				console.log(response);

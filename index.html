@@ -42,6 +42,15 @@
 		</div>
 	</section>
 
+	<section class="loginSection">
+		<div class="login" ng-if="app.noUsersHere">
+			<input type="text" placeholder="Name" ng-model="app.loginInput">
+			<input type="text" placeholder="Pass" ng-model="app.passInput">
+			<div class="loginBtn" ng-click="app.login()">LOGIN</div>
+		</div>
+		<div class="currentUser" ng-if="app.noUsersHere == false"> Hello {{app.user}} !</div>
+	</section>
+
 	<ng-view></ng-view>
 
 	<section class="moviesSection">
@@ -55,7 +64,7 @@
 				<div class="social">
 						<p>{{item.Year}}</p>
 						<p>{{item.Type}}</p>
-						<p class="star"><i class="fa fa-star js-star" aria-hidden="true" ng-click="app.addToFavorite($event)"></i></p>
+						<p class="star"><i class="fa fa-star js-star" ng-class="{'star-shine-js': app.isFavorite(item)}" aria-hidden="true" ng-click="app.toggleFavorite($event)"></i></p>
 				</div>
 			</div>
 		</div>

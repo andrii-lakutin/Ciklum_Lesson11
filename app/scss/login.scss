@@ -1,0 +1,44 @@
+@import 'variables.scss';
+
+.login{
+	display: flex;
+	justify-content: center;
+	background: $details-bg; 
+	border-bottom: 1px solid white; 
+	input[type="text"]{
+		@include inputs(); 
+		padding: 10px;
+		width: 20%;  
+		box-shadow: $btn-shadow;  
+		font-weight: 600; 
+		margin: 10px; 
+		color: $select-text;
+		background: $select;
+		border-radius: 3px; 
+		&::placeholder{
+			color: $select-text;
+		}
+	} 
+	.loginBtn{
+		width: 10%;
+		height: 35px;
+		line-height: 33px;
+		margin: 10px;   
+		text-align: center;
+		background: $search-btn;
+		color: $search-btn-text; 
+		cursor: pointer;  
+		box-shadow: $header-shadow;
+	}
+}
+
+.currentUser{
+	min-height: 55px;
+	text-align: center;
+	background: $details-bg; 
+	border-bottom: 1px solid white; 
+	color: white;
+	line-height: 55px;
+	font-size: 30px;
+	font-weight: 600;   
+}

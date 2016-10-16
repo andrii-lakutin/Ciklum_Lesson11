@@ -1,16 +1,25 @@
 import express from 'express';
 import db from './db.js';
+import passport from "./auth";
 import Movie from "./schemas/movie";
 import http from 'http';
 
 var app = express();
+app.use(passport.initialize());
 
 //CORS
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept , Authorization");
   next();
 });
+
+//AUTH
+app.get('/login',
+  passport.authenticate('basic', { session: false }),
+  function(req, res) {
+    res.json({ id: req.user.id, username: req.user.username });
+  });
 
 //1 ITEM
 app.get('/t=:title', function (req, res) {
@@ -35,19 +44,49 @@ app.post('/comment=:comment&title=:title', function (req, res) {
 	res.send('Comment added!');
 });
 
-// //FAVORITE
-// app.post('/setFavorite=:title', function (req, res) {
-// 	Movie.update({Title: req.params.title}, {$set: {Comments: req.params.comment}}, function(err, result){
-// 		if (err) {
-// 			console.log(err);
-// 		} else {
-// 			console.log();
-// 		}
-// 	});
-// 	res.send('Favorite added!');
-// });
+//FAVORITE
+app.post('/toggleFavorite=:title&user=:user', function (req, res) {
 
+	Movie.find({Title: req.params.title, FavoriteForThisUsers: req.params.user}).exec(function(err, data){
+    	if (err) {
+    		console.log(err);
+    	} else {
+    		//Movie is not in favorites? - add
+    		if (!data.length) {
+				Movie.update({Title: req.params.title}, {$push: {FavoriteForThisUsers: req.params.user}}, function(err, result){
+					if (err) {
+						console.log(err);
+					} else {
+						console.log(`${req.params.user} add to favorite ${req.params.title}`);
+					}
+				});
 
+				res.send('Favorite added!');
+			//Is movie favorite? - remove
+    		} else {
+    			Movie.update({Title: req.params.title}, {$pull: {FavoriteForThisUsers: req.params.user}}, function(err, result){
+					if (err) {
+						console.log(err);
+					} else {
+						console.log(`${req.params.user} remove from favorite ${req.params.title}`);
+					}
+				});
+
+				res.send('Favorite removed!');
+    		}
+    	}
+    });
+});
+
+app.get('/getFavorites&user=:user', function (req, res) {
+    Movie.find({FavoriteForThisUsers: req.params.user}).exec(function(err, data){
+    	if (err) {
+    		console.log(err);
+    	} else {
+    		res.send(data);
+    	}
+    });
+});
 
 //10 ITEMS
 app.get('/s=:searchInput&y=:year?&type=:type?&page=:page?', function (req, res) {
@@ -73,7 +112,11 @@ app.get('/s=:searchInput&y=:year?&type=:type?&page=:page?', function (req, res) 
 			}).on('end', function() {
 				var body = Buffer.concat(bodyChunks);
 				if (typeOfSearch === '?s') {
-					analyse(body);
+					if(JSON.parse(body.toString()).Response !== "False"){
+						analyse(body);
+					} else {
+						res.send(404, 'Not Found');
+					}
 				} else{
 					addToDb(body);
 				}

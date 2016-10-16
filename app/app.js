@@ -1,5 +1,6 @@
 import angular from "angular";
 import ngRoute from "angular-route";
+import base64 from "angular-base64";
 
 import appCtrl   from "./controllers/app.ctrl";
 import movieCtrl from "./controllers/movie.ctrl";
@@ -13,8 +14,9 @@ import filters       from  "./scss/filters.scss";
 import movies        from  "./scss/movies.scss";
 import js            from  "./scss/jsStyles.scss";
 import details       from  "./scss/details.scss";
+import login         from  "./scss/login.scss";
 
-angular.module('app',[ngRoute]) 
+angular.module('app',[ngRoute, 'base64']) 
 	.controller('appCtrl', appCtrl)
 	.controller('movieCtrl', movieCtrl)
 	.config(function($routeProvider) {

@@ -1,11 +1,12 @@
 export default class appCtrl {
 	/* @ngInject */	
-	constructor($http){
-
+	constructor($http, $base64, $rootScope){
+		this.rootScope = $rootScope;
+		this.base64 = $base64;
 		this.http = $http;
 		//HEADER
-		this.items = ['DELETE ALL','ONLY FAVORITE','SEARCH'];
-		this.icons = ["fa fa-trash-o", "fa fa-star-o", "fa fa-search"];
+		this.items = ['ONLY FAVORITE','SEARCH'];
+		this.icons = ["fa fa-star-o", "fa fa-search"];
 		//SEARCH
 		this.selectOptions = [{text : 'Movie', value : 'movie'},
 					  		  {text : 'Series' , value : 'series'},
@@ -15,15 +16,19 @@ export default class appCtrl {
 		this.page = this.pages[0];
 		this.searchInput = "";
 		this.yearInput = "";
+
+		this.loginInput = "";
+		this.passInput = "";
+		$rootScope.user = "Anonymus user";
+		this.user = $rootScope.user;
+		this.noUsersHere = true;
 		// result of search
+		this.favorites = [];
 		this.searchResult = [];
 	}
 
 	clickTarget(target){
 		switch(target) {
-   		case "DELETE ALL":
-   			this.deleteAll();
-   		    break;
    		case "ONLY FAVORITE":
    			this.onlyFavorite();
    		    break;
@@ -35,16 +40,8 @@ export default class appCtrl {
 		}
 	}
 
-	deleteAll(){
-		this.searchResult = [];
-		localStorage.clear();
-		this.clearMovies();
-	}
-
 	onlyFavorite(){
-		this.clearMovies();
-		this.searchResult = [];
-		this.renderFavorite();
+		this.searchResult = this.favorites;
 	}
 
 	hideSearch(){
@@ -61,21 +58,34 @@ export default class appCtrl {
 			url: `http://localhost:3000/s=${data.searchInput}&y=${data.yearInput}&type=${data.selectedValue}&plot=full&r=json&page=${data.page}`
 		}).then(function successCallback(response) {
 			console.log(response);
-			self.parseResponse(response);
+			if (response.status !== 404) {
+				self.parseResponse(response);
+			}
 		}, function errorCallback(response) {
 			console.log(response);
 		});
 	}
 
-	parseResponse(response){	
-		var filtered = response.data.filter((item, i, arr) =>{
-			if (localStorage.getItem(`${item.Title}`) === null) {
-				return true;
-			} else {
-				return false;
-			}
-		});
-		this.searchResult = filtered;
+	parseResponse(response){
+		var concate = this.favorites.concat(response.data);
+		//Uniq elements only(make sure we do not duplicate favorite films)
+		function unique(arr) {
+			var result = [];
+			
+			nextInput:
+				for (var i = 0; i < arr.length; i++) {
+					var str = arr[i]; 
+				for (var j = 0; j < result.length; j++) { 
+					if (result[j].Title == str.Title) continue nextInput; 
+				}
+					result.push(str);
+				}
+				return result;
+		}
+
+		var result = unique(concate);
+		console.log(result);
+		this.searchResult = result;
 	}
 
 	search(){
@@ -89,58 +99,68 @@ export default class appCtrl {
 
 	setPage(page){
 		this.page = page;
-		this.refreshData();
+		this.search();
 	}
 
-	addToFavorite(e){
+	login(){
+		var self = this;
+
+		var auth = this.base64.encode(`${this.loginInput}:${this.passInput}`), 
+    		headers = {"Authorization": "Basic " + auth},
+    		url = "http://localhost:3000/login";
+
+		this.http.get(url, {headers: headers}).then(function (response) {
+			self.rootScope.user = response.data.username;
+			self.noUsersHere = false;
+			self.user = response.data.username;
+
+			self.searchResult = [];
+			self.renderFavorite();
+
+			console.log(response);
+		}, function errorCallback(response) {
+			self.rootScope.user = "Anonymus user";
+			console.log(response);
+		});
+	}
+
+	toggleFavorite(e){
 		var target = e.target;
 		var movie = target.parentNode.parentNode.parentNode;
 		var title = movie.children[0].children[0].children[0].innerHTML;
 
 		target.classList.toggle('star-shine-js');
 
-		if (localStorage.getItem(`${title}`) != null) {
-			localStorage.removeItem(`${title}`);
-		} else{
-			localStorage.setItem(`${title}`, movie.innerHTML);
-		}
-
-		// this.http({
-		// 	method: 'POST',
-		// 	url: `http://localhost:3000/setFavorite=${title}`
-		// }).then(function successCallback(response) {
-		// 	console.log(response);
-		// }, function errorCallback(response) {
-		// 	console.log(response);
-		// });
+		this.http({
+			method: 'POST',
+			url: `http://localhost:3000/toggleFavorite=${title}&user=${this.user}`
+		}).then(function successCallback(response) {
+			console.log(response);
+		}, function errorCallback(response) {
+			console.log(response);
+		});
 	}
 
 	renderFavorite(){
 		const MOVIES_PLACE_IN_DOM = document.querySelector('.moviesSection .nonFavorites');
-		
-		for (let key in localStorage){
-			if (key.indexOf('comments') == -1) {
-				let movie = document.createElement('div');
-				movie.className = "movie fav";
-				movie.innerHTML = localStorage[key];
-				MOVIES_PLACE_IN_DOM.appendChild(movie);
-			}
-		}
+
+		var self = this;
+
+		this.http({
+			method: 'GET',
+			url: `http://localhost:3000/getFavorites&user=${this.user}`
+		}).then(function successCallback(response) {
+			self.favorites = response.data;
+			self.searchResult = self.searchResult.concat(self.favorites);
+			console.log(self.favorites);
+		}, function errorCallback(response) {
+			console.log(response);
+		});
 	}
 
-	clearMovies(){
-		const MOVIES_PLACE_IN_DOM = document.querySelector('.moviesSection .nonFavorites');
-	
-		while (MOVIES_PLACE_IN_DOM.children[0]) {
-		    MOVIES_PLACE_IN_DOM.removeChild(MOVIES_PLACE_IN_DOM.lastChild);
-		}	
-	}
-
-	refreshData(){
-		this.searchResult = [];
-		this.clearMovies();
-		this.renderFavorite();
-		this.search();
+	isFavorite(el){
+		var question = el.FavoriteForThisUsers.indexOf(this.user) !== -1;
+		return question;
 	}
 
 }
